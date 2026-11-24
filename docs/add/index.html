@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
+  <title>Add Subscription · Ox Tunnel</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c1113;
+      --surface: #141c20;
+      --recessed: #0f1619;
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #eef3f5;
+      --muted: #9eb0b8;
+      --accent: #3ddc97;
+      --accent-ink: #072216;
+      --danger: #ff6b6b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Tahoma, sans-serif;
+      background: radial-gradient(circle at top, #152528 0%, var(--bg) 55%);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(61, 220, 151, 0.14);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      line-height: 1.3;
+    }
+    .fa {
+      direction: rtl;
+      text-align: right;
+    }
+    p {
+      margin: 0 0 12px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .host-box {
+      background: var(--recessed);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 14px 0 18px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      word-break: break-all;
+    }
+    .host-box strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    .host-box span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .error-box {
+      background: rgba(255, 107, 107, 0.12);
+      border: 1px solid rgba(255, 107, 107, 0.35);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin: 14px 0;
+      color: #ffd6d6;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-align: center;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-subtle {
+      background: transparent;
+      color: var(--muted);
+      border-color: var(--border);
+      font-size: 13px;
+      padding: 10px 14px;
+    }
+    .hidden { display: none !important; }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">
+      <strong>Ox Tunnel</strong>
+      <span class="badge">HTTPS Bridge</span>
+    </div>
+
+    <h1>Add subscription to Ox Tunnel</h1>
+    <p>Tap below to import this subscription in the app. You will be asked to confirm before anything is added.</p>
+    <p class="fa">برای افزودن این اشتراک به آکس تانل روی دکمه زیر بزنید. پیش از افزوده شدن، پنجره تأیید داخل برنامه نمایش داده می‌شود.</p>
+
+    <div id="preview" class="host-box hidden">
+      <strong id="host-text"></strong>
+      <span id="url-text"></span>
+    </div>
+
+    <div id="error-box" class="error-box hidden">
+      <div>Missing or invalid HTTPS subscription URL. Only https:// links are accepted.</div>
+      <div class="fa" style="margin-top:6px;">نشانی اشتراک نامعتبر است یا وجود ندارد. فقط پیوندهای https:// پشتیبانی می‌شوند.</div>
+    </div>
+
+    <div id="valid-actions" class="actions hidden">
+      <a id="open-btn" class="btn btn-primary" href="#">Open in Ox Tunnel · باز کردن در آکس تانل</a>
+      <button id="copy-btn" class="btn btn-subtle" type="button">Copy subscription link · کپی لینک اشتراک</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="actions">
+      <a class="btn btn-secondary" href="https://github.com/MasterALiReza/OxTunnel/releases/latest">
+        Download Ox Tunnel (Latest) · دانلود آخرین نسخه
+      </a>
+    </div>
+
+    <p class="hint">
+      Nothing is sent to this page server; URLs passed via <code>#fragment</code> stay on your device.
+    </p>
+    <p class="hint fa">
+      هیچ اطلاعاتی به سرور این صفحه ارسال نمی‌شود و نشانی موجود در <code>#fragment</code> فقط روی گوشی شما پردازش می‌شود.
+    </p>
+  </main>
+
+  <script>
+    (function () {
+      function extractRawCandidate() {
+        var hash = window.location.hash ? window.location.hash.slice(1) : "";
+        if (hash) {
+          if (hash.indexOf("url=") === 0) {
+            try { return decodeURIComponent(hash.slice(4)); } catch (e) { return hash.slice(4); }
+          }
+          var hashParams = new URLSearchParams(hash);
+          if (hashParams.has("url")) {
+            return hashParams.get("url") || "";
+          }
+          if (/^https?%3A/i.test(hash)) {
+            try { return decodeURIComponent(hash); } catch (e) { return hash; }
+          }
+          return hash;
+        }
+        var query = new URLSearchParams(window.location.search || "");
+        return query.get("url") || "";
+      }
+
+      function validateHttpsUrl(raw) {
+        if (!raw) return null;
+        var trimmed = raw.trim();
+        if (!trimmed || trimmed.length > 2048 || /[\u0000-\u001f\u007f\s]/.test(trimmed)) {
+          return null;
+        }
+        try {
+          var parsed = new URL(trimmed);
+          if (parsed.protocol !== "https:") return null;
+          if (!parsed.hostname || parsed.username || parsed.password) return null;
+          parsed.hash = "";
+          return parsed;
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function maskUrlForDisplay(parsed) {
+        var path = parsed.pathname || "/";
+        if (path.length > 18) {
+          path = path.slice(0, 10) + "••••" + path.slice(-4);
+        }
+        return parsed.origin + path;
+      }
+
+      var raw = extractRawCandidate();
+      var parsed = validateHttpsUrl(raw);
+      var preview = document.getElementById("preview");
+      var hostEl = document.getElementById("host-text");
+      var urlEl = document.getElementById("url-text");
+      var errorBox = document.getElementById("error-box");
+      var validActions = document.getElementById("valid-actions");
+      var openBtn = document.getElementById("open-btn");
+      var copyBtn = document.getElementById("copy-btn");
+
+      if (!parsed) {
+        errorBox.classList.remove("hidden");
+        return;
+      }
+
+      var cleanUrl = parsed.toString();
+      var deepLink = "oxtunnel://add?url=" + encodeURIComponent(cleanUrl);
+
+      hostEl.textContent = parsed.hostname;
+      urlEl.textContent = maskUrlForDisplay(parsed);
+      openBtn.setAttribute("href", deepLink);
+      preview.classList.remove("hidden");
+      validActions.classList.remove("hidden");
+
+      copyBtn.addEventListener("click", function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(cleanUrl).then(function () {
+            copyBtn.textContent = "Copied · کپی شد";
+          });
+        }
+      });
+
+      window.setTimeout(function () {
+        window.location.href = deepLink;
+      }, 120);
+    })();
+  </script>
+</body>
+</html>

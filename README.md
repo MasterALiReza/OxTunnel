@@ -25,6 +25,16 @@ VPN app for Android: WireGuard and V2Ray configs in one place.
 
 **دانلود:** از [Releases](https://github.com/MasterALiReza/OxTunnel/releases/latest) فایل `arm64` را بگیرید. برای گوشی‌های قدیمی `armv7` است، و اگر مطمئن نیستید فایل بدون پسوند را بگیرید. حداقل اندروید ۸ لازم است.
 
+### افزودن اشتراک با یک کلیک از تلگرام
+
+تلگرام در دکمه‌های ربات و پیام‌ها فقط پیوندهای `http(s)` و `tg` را قابل کلیک می‌کند. برای ساخت دکمه «افزودن به آکس تانل» از صفحهٔ پل HTTPS زیر استفاده کنید (توکن در `#` روی دستگاه کاربر می‌ماند و به سرور ارسال نمی‌شود):
+
+```
+https://masteralireza.github.io/OxTunnel/add#<url-encoded-https-subscription-url>
+```
+
+این صفحه اپ را با پیوند `oxtunnel://add?url=<url-encoded>` باز می‌کند و در صورت نصب نبودن اپ، دکمه دانلود آخرین نسخه را نشان می‌دهد. اپ پیش از ذخیره همیشه پنجره تأیید را به کاربر نمایش می‌دهد.
+
 </div>
 
 ## English
@@ -41,5 +51,15 @@ One app for WireGuard, VLESS, VMess, Trojan, Shadowsocks and Hysteria2.
 **Download:** from [Releases](https://github.com/MasterALiReza/OxTunnel/releases/latest), take the `arm64` APK. Use `armv7` for old phones, or the plain one if you are not sure. Android 8.0 or newer.
 
 Questions and bug reports: [Telegram](https://t.me/OxVpN_Net) or [Issues](https://github.com/MasterALiReza/OxTunnel/issues).
+
+### One-tap Telegram subscription bridge
+
+Telegram inline buttons only support `http(s)://` and `tg://` links. Providers and bots can link users directly through the privacy-preserving GitHub Pages bridge (the URL in `#` stays client-side and is never sent to GitHub):
+
+```
+https://masteralireza.github.io/OxTunnel/add#<url-encoded-https-subscription-url>
+```
+
+The bridge validates that the link uses `https://`, triggers `oxtunnel://add?url=<url-encoded>`, and offers a download button for the latest release if Ox Tunnel is not installed. Ox Tunnel always prompts for confirmation before adding the subscription.
 
 The source code is private. Ox Tunnel uses open-source parts, listed in [NOTICE.md](NOTICE.md).
