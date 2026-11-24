@@ -166,8 +166,8 @@
     </div>
 
     <div id="error-box" class="error-box hidden">
-      <div>Missing or invalid HTTPS subscription URL. Only https:// links are accepted.</div>
-      <div class="fa" style="margin-top:6px;">نشانی اشتراک نامعتبر است یا وجود ندارد. فقط پیوندهای https:// پشتیبانی می‌شوند.</div>
+      <div id="error-en">Missing or invalid HTTPS subscription URL. Only https:// links are accepted.</div>
+      <div id="error-fa" class="fa" style="margin-top:6px;">نشانی اشتراک نامعتبر است یا وجود ندارد. فقط پیوندهای https:// پشتیبانی می‌شوند.</div>
     </div>
 
     <div id="valid-actions" class="actions hidden">
@@ -193,23 +193,23 @@
 
   <script>
     (function () {
+      var query = new URLSearchParams(window.location.search || "");
+      var hasQueryUrl = query.has("url");
+
       function extractRawCandidate() {
         var hash = window.location.hash ? window.location.hash.slice(1) : "";
-        if (hash) {
-          if (hash.indexOf("url=") === 0) {
-            try { return decodeURIComponent(hash.slice(4)); } catch (e) { return hash.slice(4); }
-          }
-          var hashParams = new URLSearchParams(hash);
-          if (hashParams.has("url")) {
-            return hashParams.get("url") || "";
-          }
-          if (/^https?%3A/i.test(hash)) {
-            try { return decodeURIComponent(hash); } catch (e) { return hash; }
-          }
-          return hash;
+        if (!hash) return "";
+        if (hash.indexOf("url=") === 0) {
+          try { return decodeURIComponent(hash.slice(4)); } catch (e) { return hash.slice(4); }
         }
-        var query = new URLSearchParams(window.location.search || "");
-        return query.get("url") || "";
+        var hashParams = new URLSearchParams(hash);
+        if (hashParams.has("url")) {
+          return hashParams.get("url") || "";
+        }
+        if (/^https?%3A/i.test(hash)) {
+          try { return decodeURIComponent(hash); } catch (e) { return hash; }
+        }
+        return hash;
       }
 
       function validateHttpsUrl(raw) {
@@ -237,15 +237,28 @@
         return parsed.origin + path;
       }
 
-      var raw = extractRawCandidate();
-      var parsed = validateHttpsUrl(raw);
       var preview = document.getElementById("preview");
       var hostEl = document.getElementById("host-text");
       var urlEl = document.getElementById("url-text");
       var errorBox = document.getElementById("error-box");
+      var errorEn = document.getElementById("error-en");
+      var errorFa = document.getElementById("error-fa");
       var validActions = document.getElementById("valid-actions");
       var openBtn = document.getElementById("open-btn");
       var copyBtn = document.getElementById("copy-btn");
+
+      if (hasQueryUrl) {
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState(null, "", window.location.pathname + (window.location.hash || ""));
+        }
+        errorEn.textContent = "Wrong link format. Subscription links must use #fragment instead of ?url=.";
+        errorFa.textContent = "فرمت لینک اشتباه است. لینک اشتراک باید با # ارسال شود نه ?url=.";
+        errorBox.classList.remove("hidden");
+        return;
+      }
+
+      var raw = extractRawCandidate();
+      var parsed = validateHttpsUrl(raw);
 
       if (!parsed) {
         errorBox.classList.remove("hidden");
