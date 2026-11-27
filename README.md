@@ -6,7 +6,13 @@ VPN client for Android: WireGuard, AmneziaWG, and V2Ray/Xray configs in one plac
 
 [**Download**](https://github.com/MasterALiReza/OxTunnel/releases/latest) · [Telegram](https://t.me/OxVpN_Net)
 
-<img src="screenshots/01-connect-dark.png" width="190"> <img src="screenshots/02-servers-dark.png" width="190"> <img src="screenshots/05-subs-light.png" width="190"> <img src="screenshots/06-settings-light.png" width="190">
+<img src="screenshots/01-connect-dark.png" width="190"> <img src="screenshots/02-servers-dark.png" width="190"> <img src="screenshots/03-subs-dark.png" width="190"> <img src="screenshots/04-manage-dark.png" width="190">
+
+<details>
+<summary>More screenshots</summary>
+<br>
+<img src="screenshots/05-connect-light.png" width="190"> <img src="screenshots/06-settings-dark.png" width="190"> <img src="screenshots/07-notifications-dark.png" width="190">
+</details>
 
 </div>
 
